@@ -52,8 +52,6 @@ namespace PathFinder
             var fLimit = Heuristic(startNode, endNode);
             var found = false;
 
-            INode enode = null;
-
             while (!found && fringe.Count > 0)
             {
                 var fMin = float.MaxValue;
@@ -74,8 +72,11 @@ namespace PathFinder
                     var eq = EqualityComparer<INode>.Default;
                     if (eq.Equals(node, endNode))
                     {
+                        // Depending on INode implementation, end node could be equivalent to the found node 
+                        // and not necessarely the same object.
+                        endNode = node;
                         found = true;
-                        enode = node;
+
                         break;
                     }
 
@@ -130,9 +131,9 @@ namespace PathFinder
                 return null;
             }
 
-            PathCost = cache[enode].cost;
+            PathCost = cache[endNode].cost;
 
-            var pathNode = enode;
+            var pathNode = endNode;
             while (pathNode != null)
             {
                 path.AddFirst(pathNode);

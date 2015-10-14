@@ -30,36 +30,36 @@ public class GOAPTest : MonoBehaviour {
         var planner = new ActionPlanner();
         planner.Clear();
 
-        var scout = new GoapAction();
-        planner.SetPrecondition (scout, "Alive", true);
-        planner.SetPostcondition(scout, "EnemyVisible", true);
+        var scout = planner.CreateAction("Scout");
+        scout.SetPrecondition ("Alive", true);
+        scout.SetPostcondition("EnemyVisible", true);
 
-        var approach = new GoapAction();
-        planner.SetPrecondition (approach, "EnemyVisible", true);
-        planner.SetPostcondition(approach, "NearEnemy", true);
+        var approach =planner.CreateAction("Approach");
+        approach.SetPrecondition ("EnemyVisible", true);
+        approach.SetPostcondition("NearEnemy", true);
         
-        var aim = new GoapAction();
-        planner.SetPrecondition (aim, "EnemyVisible", true);
-        planner.SetPrecondition (aim, "WeaponLoaded", true);
-        planner.SetPostcondition(aim, "EnemyLinedUp", true);
+        var aim =planner.CreateAction("Aim");
+        aim.SetPrecondition ("EnemyVisible", true);
+        aim.SetPrecondition ("WeaponLoaded", true);
+        aim.SetPostcondition("EnemyLinedUp", true);
 
-        var shoot = new GoapAction();
-        planner.SetPrecondition (shoot, "EnemyLinedUp", true);
-        planner.SetPostcondition(shoot, "EnemyAlive", false);
+        var shoot =planner.CreateAction("Shoot");
+        shoot.SetPrecondition ("EnemyLinedUp", true);
+        shoot.SetPostcondition("EnemyAlive", false);
 
-        var load = new GoapAction();
-        planner.SetPrecondition (load, "ArmedWithGun", true);
-        planner.SetPostcondition(load, "WeaponLoaded", true);
+        var load =planner.CreateAction("Load");
+        load.SetPrecondition ("ArmedWithGun", true);
+        load.SetPostcondition("WeaponLoaded", true);
 
-        var detonateBomb = new GoapAction { Cost = 5 };
-        planner.SetPrecondition (detonateBomb, "ArmedWithBomb", true);
-        planner.SetPrecondition (detonateBomb, "NearEnemy", true);
-        planner.SetPostcondition(detonateBomb, "Alive", false);
-        planner.SetPostcondition(detonateBomb, "EnemyAlive", false);
+        var detonateBomb =planner.CreateAction("DetonateBomb", 5);
+        detonateBomb.SetPrecondition ("ArmedWithBomb", true);
+        detonateBomb.SetPrecondition ("NearEnemy", true);
+        detonateBomb.SetPostcondition("Alive", false);
+        detonateBomb.SetPostcondition("EnemyAlive", false);
 
-        var flee = new GoapAction();
-        planner.SetPrecondition (flee, "EnemyVisible", true);
-        planner.SetPostcondition(flee, "EnemyVisible", false);
+        var flee =planner.CreateAction("Flee");
+        flee.SetPrecondition ("EnemyVisible", true);
+        flee.SetPostcondition("EnemyVisible", false);
 
         Debug.Log(planner.ToString());
 
@@ -90,7 +90,7 @@ public class GOAPTest : MonoBehaviour {
 
         foreach (WorldStateNode node in path)
         {
-            Debug.Log(node.State);
+            Debug.Log(node.State.ToString(planner.Atoms));
         }
     }
 

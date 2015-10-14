@@ -8,19 +8,55 @@ namespace GOAP
 {
     public class ActionPlanner
     {
+        public class Action
+        {
+            public int Cost;
+            public WorldState Preconditions;
+            public WorldState Postconditions;
+            public string Name;
+            public ActionPlanner Planner;
+
+            public void SetPrecondition(string atom, bool? value)
+            {
+                var atomIndex = Planner.StringToAtom(atom);
+
+                Preconditions[atomIndex] = value;
+            }
+
+
+            public void SetPostcondition(string atom, bool? value)
+            {
+                var atomIndex = Planner.StringToAtom(atom);
+
+                Postconditions[atomIndex] = value;
+            }
+        }
+
         public const short MaxAtoms = sizeof(long) * 8;
         public const short MaxActions = sizeof(long) * 8;
         
-        //private string[] atomNames = new string[MaxActions];
-        //private string[] actionNames = new string[MaxActions];
-
-        public HashSet<GoapAction> Actions = new HashSet<GoapAction>();
+        public HashSet<Action> Actions = new HashSet<Action>();
         public List<string> Atoms = new List<string>(); 
 
         public void Clear()
         {
             Actions.Clear();
             Atoms.Clear();
+        }
+
+        public Action CreateAction(string name, int cost = 1)
+        {
+            var action = new Action {
+                Cost = cost,
+                Preconditions = default(WorldState),
+                Postconditions = default(WorldState),
+                Name = name,
+                Planner = this,
+            };
+
+            Actions.Add(action);
+
+            return action;
         }
 
         public short StringToAtom(string atom)
@@ -40,27 +76,11 @@ namespace GOAP
             return atomIndex < Atoms.Count ? Atoms[atomIndex] : null;
         }
 
-        public bool? SetPrecondition(GoapAction goapAction, string atom, bool? value)
-        {
-            var atomIndex = StringToAtom(atom);
-
-            return goapAction.Preconditions[atomIndex] = value;
-        }
-
-        public bool? SetPostcondition(GoapAction goapAction, string atom, bool? value)
-        {
-            var atomIndex = StringToAtom(atom);
-
-            return goapAction.Preconditions[atomIndex] = value;
-        }
-
-    
-
-        public WorldState PerformAction(GoapAction goapAction, WorldState from)
+        public WorldState PerformAction(Action goapAction, WorldState from)
         {
             var result = new WorldState();
             
-            var postcondition = goapAction.Preconditions;
+            var postcondition = goapAction.Postconditions;
             var affected = postcondition.Mask;
             var unaffected = affected ^ -1L;
 
