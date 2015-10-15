@@ -41,11 +41,12 @@ namespace GOAP
         }
 
 
-        public string ToString(IList<string> atoms, string format = null)
+        public string ToString(IList<string> atoms, string format = null, string separator = ", ", string start = "[", string end = "]")
         {
             var sb = new StringBuilder();
 
-            var sep = "[";
+            var count = 0;
+            var sep = start;
             for (short i = 0; i < 64; i++)
             {
                 if (this[i] != null)
@@ -55,12 +56,14 @@ namespace GOAP
                     //    Debug.Log(IsSet(i) + " " + atoms.Length + " " + i + "\n" + Convert.ToString(Mask, 2).PadLeft(64, '0') + "\n" + Convert.ToString(Values, 2).PadLeft(64, '0'));
                     //}
 
+                    count++;
+
                     var value = this[i].Value;
 
                     if (string.IsNullOrEmpty(format))
                     {
                         sb.Append(sep + (value ? " " : "!") + atoms[i]);
-                        sep = ", ";
+                        sep = separator;
                     }
                     else
                     {
@@ -68,7 +71,13 @@ namespace GOAP
                     }
                 }
             }
-            sb.Append("]");
+
+            if (count == 0)
+            {
+                return "<Empty>";
+            }
+
+            sb.Append(end);
 
             return sb.ToString();
         }

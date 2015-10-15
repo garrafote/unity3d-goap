@@ -101,8 +101,8 @@ namespace GOAP
                 var pre = action.Preconditions;
                 var post = action.Postconditions;
 
-                sb.AppendLine(pre.ToString(Atoms, "{0} == {1}\n"));
-                sb.AppendLine(post.ToString(Atoms, "{0} := {1}\n"));
+                sb.AppendLine(pre.ToString(Atoms, "{0} == {1}", "\n", "", ""));
+                sb.AppendLine(post.ToString(Atoms, "{0} := {1}", "\n", "", ""));
 
                 sb.AppendLine();
             }

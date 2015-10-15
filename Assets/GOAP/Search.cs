@@ -61,7 +61,7 @@ namespace GOAP
 
                     var connection = new NodeConnection();
                     connection.From = from;
-                    connection.To = new WorldStateNode(this, neighbour);
+                    connection.To = new WorldStateNode(this, neighbour, action);
                     connection.Cost = action.Cost;
 
                     result.Add(connection);
@@ -77,11 +77,13 @@ namespace GOAP
     {
         public readonly GoapGraph Graph;
         public WorldState State;
+        public ActionPlanner.Action Action;
 
-        public WorldStateNode(GoapGraph graph, WorldState state)
+        public WorldStateNode(GoapGraph graph, WorldState state, ActionPlanner.Action action)
         {
             Graph = graph;
             State = state;
+            Action = action;
         }
 
         public float Weight { get { return 1; } }

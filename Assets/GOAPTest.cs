@@ -83,8 +83,8 @@ public class GOAPTest : MonoBehaviour {
         var search = new Fringe(GoapGraph.PlannerHeuristic);
 
         var graph = new GoapGraph(planner);
-        var stateNode = new WorldStateNode(graph, state);
-        var goalNode = new WorldStateNode(graph, goal);
+        var stateNode = new WorldStateNode(graph, state, null);
+        var goalNode = new WorldStateNode(graph, goal, null);
 
         var path = search.FindPath(stateNode, goalNode);
 
